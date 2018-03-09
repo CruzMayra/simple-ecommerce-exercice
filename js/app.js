@@ -39,20 +39,24 @@ const checkoutArray = [];
 let counterCart = 0;
 
 
-function addToCart(id) {
+function addToCart() {
   // cuando agrego a carrito, tengo que:
   // 1) Incrementar en uno mi contador del menu
   counterCart += 1;
   increaseCounter(localStorage.setItem('counter',counterCart));
   // 2) Guardar mi producto en algun lugar
-  let productElement = event.target.parentElement.firstElementChild.textContent;
+  let productElement = parseInt(event.target.dataset.productId);
+  console.log(productElement);
   let selectedProduct = data.products.find(product => {
     // return checkoutArray.push(product)
-    return product.title === productElement;
+    return product.id === productElement;
   })
+  console.log(selectedProduct);
   checkoutArray.push(selectedProduct);
   localStorage.setItem('checkout', JSON.stringify(checkoutArray));
   // 3) Cambiar el boton de agregar a carrito por quitar del carrito
+  event.target.style.display = "none";
+  event.target.nextElementSibling.style.display = "inline-block"
 }
 
 function removeFromCart() {
