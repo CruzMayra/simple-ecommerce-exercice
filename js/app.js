@@ -1,3 +1,4 @@
+// función que pinta los productos disponibles en home
 function drawProducts(data) {
   let products = data.products;
   let productsContainer = document.getElementById("products-container");
@@ -7,6 +8,7 @@ function drawProducts(data) {
   });
 }
 
+// función que crea la tarjeta con el producto
 function createProductHTML(product) {
   let template = `
     <h3>${product.title}</h3>
@@ -14,9 +16,14 @@ function createProductHTML(product) {
     <p>${product.description}</p>
     <button data-product-id=${product.id}
       onclick="addToCart(${product.id})"
-      class='btn btn-primary'>
+      class='btn btn-primary add'>
         Agregar a carrito
       </button>
+      <button data-product-id=${product.id}
+        onclick="removeFromCart(${product.id})"
+        class='btn btn-primary remove'>
+          Eliminar de carrito
+        </button>
     <hr/>
   `;
   let productContainer = document.createElement("div");
@@ -27,13 +34,25 @@ function createProductHTML(product) {
 
 drawProducts(data);
 
-function addToCart() {
-  /* cuando agrego a carrito, tengo que:
-  1) Incrementar en uno mi contador del menu
-  2) Guardar mi producto en algun lugar
-  3) Cambiar el boton de agregar a carrito
-  por quitar del carrito
-  */
+const elementCounter = document.getElementById('counterItems');
+const checkoutArray = [];
+let counterCart = 0;
+
+
+function addToCart(id) {
+  // cuando agrego a carrito, tengo que:
+  // 1) Incrementar en uno mi contador del menu
+  counterCart += 1;
+  increaseCounter(localStorage.setItem('counter',counterCart));
+  // 2) Guardar mi producto en algun lugar
+  let productElement = event.target.parentElement.firstElementChild.textContent;
+  let selectedProduct = data.products.find(product => {
+    // return checkoutArray.push(product)
+    return product.title === productElement;
+  })
+  checkoutArray.push(selectedProduct);
+  localStorage.setItem('checkout', JSON.stringify(checkoutArray));
+  // 3) Cambiar el boton de agregar a carrito por quitar del carrito
 }
 
 function removeFromCart() {
@@ -46,6 +65,8 @@ function removeFromCart() {
 }
 
 function increaseCounter() {
+  elementCounter.innerText = localStorage.getItem('counter');
+
   /* como accedemos al HTML del contador
   y como lo incrementamos*/
 }
